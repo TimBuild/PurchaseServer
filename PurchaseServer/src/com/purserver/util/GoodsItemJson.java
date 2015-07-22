@@ -55,11 +55,12 @@ public class GoodsItemJson {
 					listGoods.add(goods);
 
 				}
+				GoodsItem goods = new GoodsItem();
+				listGoods.add(goods);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 		return listGoods;
 
 	}
