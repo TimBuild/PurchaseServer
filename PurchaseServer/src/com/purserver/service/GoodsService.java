@@ -38,12 +38,14 @@ public class GoodsService {
 	@POST
 	@Path("/searchGoods")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<AiTaoBao> getGoods(@FormParam("page_no") String page_no,
-			@FormParam("page_size") String page_size) {
+	public List<AiTaoBao> getGoodsSearch(@FormParam("keyword") String keyword,
+			@FormParam("page_no") String page_no,
+			@FormParam("page_size") String page_size,
+			@FormParam("sort") String sort) {
 
-		List<AiTaoBao> lists = GoodsItemJson.getAiTaoSearch(goodsSearch
-				.getGoodsSearch(Long.parseLong(page_no),
-						Long.parseLong(page_size)));
+		String aitaobao = goodsSearch.getGoodsSearch(keyword,
+				Long.parseLong(page_no), Long.parseLong(page_size), sort);
+		List<AiTaoBao> lists = GoodsItemJson.getAiTaoSearch(aitaobao);
 		return lists;
 
 	}
