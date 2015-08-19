@@ -17,7 +17,7 @@ public class TestGoodsService {
 	@Test
 	public void test1(){
 		GoodsSearchServer goodsSearchServer = new GoodsSearchServer();
-//		System.out.println("test1:"+GoodsItemJson.getAiTaoSearch(goodsSearchServer.getGoodsSearch()));
+		System.out.println("test1:"+GoodsItemJson.getAiTaoSearch(goodsSearchServer.getGoodsSearch("Ёдию",1L,10L,"commissionNum_desc")));
 	}
 
 }
