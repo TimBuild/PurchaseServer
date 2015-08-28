@@ -10,16 +10,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.purserver.entity.AiTaoBao;
+import com.purserver.entity.DiscountBao;
 import com.purserver.entity.GoodsItem;
+import com.purserver.server.AiTaobaoSearchServer;
+import com.purserver.server.DiscountServer;
 import com.purserver.server.GoodsDetailsServer;
-import com.purserver.server.GoodsSearchServer;
-import com.purserver.util.GoodsItemJson;
+import com.purserver.util.JsonParseList;
 
 @Path("/GoodsService")
 public class GoodsService {
 
 	private GoodsDetailsServer goodsServer = new GoodsDetailsServer();
-	private GoodsSearchServer goodsSearch = new GoodsSearchServer();
+	private AiTaobaoSearchServer goodsSearch = new AiTaobaoSearchServer();
+	private DiscountServer discountServer = new DiscountServer();
 
 	@POST
 	@Path("/getGoods")
@@ -28,7 +31,7 @@ public class GoodsService {
 			@FormParam("pageSize") String pageSize,
 			@FormParam("page") String page) {
 
-		List<GoodsItem> lists = GoodsItemJson.getGoodsItem(goodsServer
+		List<GoodsItem> lists = JsonParseList.getGoodsItem(goodsServer
 				.getGoodsDetails(tagIds, Long.parseLong(pageSize),
 						Long.parseLong(page)));
 		return lists;
@@ -45,8 +48,21 @@ public class GoodsService {
 
 		String aitaobao = goodsSearch.getGoodsSearch(keyword,
 				Long.parseLong(page_no), Long.parseLong(page_size), sort);
-		List<AiTaoBao> lists = GoodsItemJson.getAiTaoSearch(aitaobao);
+		List<AiTaoBao> lists = JsonParseList.getAiTaoSearch(aitaobao);
 		return lists;
 
+	}
+	
+	@POST
+	@Path("/searchDiscountGoods")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<DiscountBao> getDiscount(@FormParam("keyword") String keyword,
+			@FormParam("page_no") String page_no,
+			@FormParam("page_size") String page_size,
+			@FormParam("sort") String sort) {
+		String discount = discountServer.getDiscountSearch(keyword,
+				Long.parseLong(page_no), Long.parseLong(page_size), sort);
+		List<DiscountBao> lists = JsonParseList.getDiscountList(discount);
+		return lists;
 	}
 }

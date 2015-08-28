@@ -8,9 +8,10 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.purserver.entity.AiTaoBao;
+import com.purserver.entity.DiscountBao;
 import com.purserver.entity.GoodsItem;
 
-public class GoodsItemJson {
+public class JsonParseList {
 
 	/**
 	 * 综合排序
@@ -76,7 +77,7 @@ public class GoodsItemJson {
 	 * 爱淘宝商品转换成json传给客户端,客户端取得数据记得要减一
 	 * 
 	 * @param aiTao
-	 * @return
+	 * @return 爱淘宝商品的List集合
 	 */
 	public static List<AiTaoBao> getAiTaoSearch(String aiTao) {
 		JSONObject jsonObject;
@@ -122,6 +123,62 @@ public class GoodsItemJson {
 						listGoods.add(good);
 					}
 					AiTaoBao good = new AiTaoBao();
+					listGoods.add(good);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return listGoods;
+
+	}
+
+	/**
+	 * 爱淘宝"折扣"商品转换成json传给客户端,客户端取得数据记得要减一
+	 * 
+	 * @param discount
+	 * @return 爱淘宝"折扣"商品的list
+	 */
+	public static List<DiscountBao> getDiscountList(String discount) {
+		JSONObject jsonObject;
+		List<DiscountBao> listGoods = new ArrayList<>();
+
+		try {
+			jsonObject = new JSONObject(discount);
+			JSONObject jsonObject2 = jsonObject
+					.getJSONObject("atb_items_coupon_get_response");
+
+			if (!jsonObject2.get("total_results").equals(0)) {
+
+				JSONObject jsonObject3 = (JSONObject) jsonObject2.get("items");
+				if (jsonObject3.length() != 0) {
+					JSONArray jsonArray = jsonObject3
+							.getJSONArray("aitaobao_item");
+					for (int i = 0; i < jsonArray.length(); i++) {
+						JSONObject items = (JSONObject) jsonArray.opt(i);
+
+						DiscountBao good = new DiscountBao();
+
+						String open_iid = (String) items.get("open_iid");
+						String pic_url = (String) items.get("pic_url");
+						String title = (String) items.get("title");
+						double price = (double) items.get("price");
+						double coupon_price = (double) items
+								.get("coupon_price");
+						String shop_type = (String) items.get("shop_type");
+						String nick = (String) items.get("nick");
+
+						good.setOpen_iid(open_iid);
+						good.setPic_url(pic_url);
+						good.setTitle(title);
+						good.setPrice(price);
+						good.setNick(nick);
+						good.setShop_type(shop_type);
+						good.setCoupon_price(coupon_price);
+
+						listGoods.add(good);
+					}
+					DiscountBao good = new DiscountBao();
 					listGoods.add(good);
 				}
 			}

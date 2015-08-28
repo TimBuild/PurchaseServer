@@ -10,7 +10,7 @@ import static com.purserver.global.Constants.APP_KEY;
 import static com.purserver.global.Constants.SECRET;
 import static com.purserver.global.Constants.URL;
 
-public class GoodsSearchServer {
+public class AiTaobaoSearchServer {
 
 	public String getGoodsSearch(String keyword,Long page_no, Long page_size,String sort) {
 		TaobaoClient client = new DefaultTaobaoClient(URL, APP_KEY, SECRET);
